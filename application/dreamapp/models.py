@@ -24,6 +24,7 @@ class ServerData(Model):
 
     class Meta:
         db_table = 'server_data'
+        """ Объявление составного уникального значения по полям ip и port """
         unique_together = ('ip', 'port')
 
     def __str__(self):
@@ -49,6 +50,7 @@ class FriendList(Model):
 
     class Meta:
         db_table = 'friend_list'
+        """ Объявление составного уникального значения по полям owner и friend """
         unique_together = ('owner', 'friend')
 
     def __str__(self):
@@ -77,6 +79,7 @@ class AccountAccessLevel(Model):
 
     class Meta:
         db_table = 'account_access_level'
+        """ Объявление составного уникального значения по полям account и access_level """
         unique_together = ('account', 'access_level')
 
     def __str__(self):
@@ -90,6 +93,7 @@ class ServerAccessLevel(Model):
 
     class Meta:
         db_table = 'server_access_level'
+        """ Объявление составного уникального значения по полям server и access_level """
         unique_together = ('server', 'access_level')
 
     def __str__(self):
