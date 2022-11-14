@@ -1,7 +1,9 @@
 from django.test import TransactionTestCase
-from .services.repository_service import *
-
-# Create your tests here.
+from .services.friend_news_service import NewsDataService, FriendListService
+from .services.access_service import AccessLevelService, ServiceAccessLevelService
+from .services.account_service import AccountService
+from .services.server_service import ServerDataService
+from .services.account_access_service import AccountServiceAccessLevelService, AccountServerAccessLevelService
 
 
 class FriendListTestCase(TransactionTestCase):
@@ -80,94 +82,6 @@ class NewsDataTestCase(TransactionTestCase):
         pass
 
 
-class AccountAccessLevelTestCase(TransactionTestCase):
-    reset_sequences = True
-
-    def setUp(self):
-        AccountService.create_account(_username='first', _email='first', _password='0')
-        AccessLevelService.create_access_level(_level=1, _name='zero')
-        AccountAccessLevelService.create_account_access_level(_account=1, _access_level=1)
-
-    def test_get_account_access_level_by_account(self):
-        """ Тест функции поиска записи AccountAccessLevel по аккаунту """
-        result = AccountAccessLevelService.get_account_access_level_by_account(_account=1)
-        for row in result:
-            print(row)
-            self.assertIsNotNone(row)
-            self.assertTrue(row.account.username == 'first')
-            self.assertTrue(row.access_level.name == 'zero')
-
-    def test_get_account_access_level_by_access_level(self):
-        """ Тест функции поиска записи AccountAccessLevel по уровню доступа """
-        result = AccountAccessLevelService.get_account_access_level_by_access_level(_access_level=1)
-        for row in result:
-            print(row)
-            self.assertIsNotNone(row)
-            self.assertTrue(row.account.username == 'first')
-            self.assertTrue(row.access_level.name == 'zero')
-
-    def test_get_account_access_level_by_id(self):
-        """ Тест функции поиска записи AccountAccessLevel по id """
-        result = AccountAccessLevelService.get_account_access_level_by_id(_id=1)
-        print(result)
-        self.assertIsNotNone(result)
-        self.assertTrue(result.account.username == 'first')
-        self.assertTrue(result.access_level.name == 'zero')
-
-    def test_delete_account_access_level_by_id(self):
-        """ Тест функции удаления записи AccountAccessLevel по id """
-        AccountAccessLevelService.delete_account_access_level_by_id(_id=1)
-        result = AccountAccessLevelService.get_account_access_level_by_id(_id=1)
-        self.assertIsNone(result)
-
-    def tearDown(self):
-        pass
-
-
-class ServerAccessLevelTestCase(TransactionTestCase):
-    reset_sequences = True
-
-    def setUp(self):
-        ServerDataService.create_server_data(_name='first', _ip='first', _port=0)
-        AccessLevelService.create_access_level(_level=1, _name='zero')
-        ServerAccessLevelService.create_server_access_level(_server=1, _access_level=1)
-
-    def test_get_server_access_level_by_server(self):
-        """ Тест функции поиска записи ServerAccessLevel по серверу """
-        result = ServerAccessLevelService.get_server_access_level_by_server(_server=1)
-        for row in result:
-            print(row)
-            self.assertIsNotNone(row)
-            self.assertTrue(row.server.name == 'first')
-            self.assertTrue(row.access_level.name == 'zero')
-
-    def test_get_server_access_level_by_access_level(self):
-        """ Тест функции поиска записи ServerAccessLevel по уровню доступа """
-        result = ServerAccessLevelService.get_server_access_level_by_access_level(_access_level=1)
-        for row in result:
-            print(row)
-            self.assertIsNotNone(row)
-            self.assertTrue(row.server.name == 'first')
-            self.assertTrue(row.access_level.name == 'zero')
-
-    def test_get_server_access_level_by_id(self):
-        """ Тест функции поиска записи ServerAccessLevel по id """
-        result = ServerAccessLevelService.get_server_access_level_by_id(_id=1)
-        print(result)
-        self.assertIsNotNone(result)
-        self.assertTrue(result.server.name == 'first')
-        self.assertTrue(result.access_level.name == 'zero')
-
-    def test_delete_server_access_level_by_id(self):
-        """ Тест функции удаления записи ServerAccessLevel по id """
-        ServerAccessLevelService.delete_server_access_level_by_id(_id=1)
-        result = ServerAccessLevelService.get_server_access_level_by_id(_id=1)
-        self.assertIsNone(result)
-
-    def tearDown(self):
-        pass
-
-
 class ServerDataTestCase(TransactionTestCase):
     reset_sequences = True
 
@@ -209,6 +123,60 @@ class AccessLevelTestCase(TransactionTestCase):
         """ Тест функции удаления записи AccessLevel по id """
         AccessLevelService.delete_access_level_by_id(_id=1)
         result = AccessLevelService.get_access_level_by_id(_id=1)
+        self.assertIsNone(result)
+
+    def tearDown(self):
+        pass
+
+
+class AccountServerAccessLevelTestCase(TransactionTestCase):
+    reset_sequences = True
+
+    def setUp(self):
+        AccountService.create_account(_username='first', _email='first', _password='0')
+        ServerDataService.create_server_data(_name='first', _ip='first', _port=0)
+        AccessLevelService.create_access_level(_level=1, _name='zero')
+        AccountServerAccessLevelService.create_account_server_access_level(_account=1, _server=1, _access_level=1)
+
+    def test_get_account_access_level_by_account(self):
+        """ Тест функции поиска записи AccountAccessLevel по аккаунту """
+        result = AccountServerAccessLevelService.get_account_server_access_level_by_account(_account=1)
+        for row in result:
+            print(row)
+            self.assertIsNotNone(row)
+            self.assertTrue(row.account.username == 'first')
+            self.assertTrue(row.access_level.name == 'zero')
+
+    def test_get_account_access_level_by_server(self):
+        """ Тест функции поиска записи ServerAccessLevel по серверу """
+        result = AccountServerAccessLevelService.get_account_server_access_level_by_server(_server=1)
+        for row in result:
+            print(row)
+            self.assertIsNotNone(row)
+            self.assertTrue(row.server.name == 'first')
+            self.assertTrue(row.access_level.name == 'zero')
+
+    def test_get_account_access_level_by_access_level(self):
+        """ Тест функции поиска записи AccountAccessLevel по уровню доступа """
+        result = AccountServerAccessLevelService.get_account_server_access_level_by_access_level(_access_level=1)
+        for row in result:
+            print(row)
+            self.assertIsNotNone(row)
+            self.assertTrue(row.account.username == 'first')
+            self.assertTrue(row.access_level.name == 'zero')
+
+    def test_get_account_access_level_by_id(self):
+        """ Тест функции поиска записи AccountAccessLevel по id """
+        result = AccountServerAccessLevelService.get_account_server_access_level_by_id(_id=1)
+        print(result)
+        self.assertIsNotNone(result)
+        self.assertTrue(result.account.username == 'first')
+        self.assertTrue(result.access_level.name == 'zero')
+
+    def test_delete_account_access_level_by_id(self):
+        """ Тест функции удаления записи AccountAccessLevel по id """
+        AccountServerAccessLevelService.delete_account_server_access_level_by_id(_id=1)
+        result = AccountServerAccessLevelService.get_account_server_access_level_by_id(_id=1)
         self.assertIsNone(result)
 
     def tearDown(self):
