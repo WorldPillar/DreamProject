@@ -6,7 +6,7 @@ from django.urls import path
 
 urlpatterns = [
     # news api
-    path('news', NewsGetAPIView.as_view()),
+    path('news/<int:count>', NewsGetAPIView.as_view()),
     path('news/post', NewsPostAPIView.as_view()),
     path('news/delete/<int:pk>', NewsDeleteAPIView.as_view()),
     # friendlist api

@@ -63,14 +63,14 @@ WSGI_APPLICATION = 'application.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DreamDB',
-        'USER': 'dreamer',
-        'PASSWORD': 'qwerty',
-        'HOST': '192.168.56.104',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'NAME': 'DreamDB',
+        # 'USER': 'dreamer',
+        # 'PASSWORD': 'qwerty',
+        # 'HOST': '192.168.56.104',
+        # 'PORT': '3306',
     }
 }
 

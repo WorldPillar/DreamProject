@@ -8,6 +8,15 @@ class ServerDataSerializer(serializers.ModelSerializer):
         fields = ['ip', 'port', 'name']
 
 
+class ServerDataWithCountSerializer(serializers.ModelSerializer):
+    maximum = serializers.IntegerField()
+    current = serializers.IntegerField()
+
+    class Meta:
+        model = ServerData
+        fields = ['ip', 'port', 'name', 'maximum', 'current']
+
+
 class UpdateServerDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServerData

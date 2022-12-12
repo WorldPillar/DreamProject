@@ -4,18 +4,20 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from ..serializers.server_serializers import ServerDataSerializer, UpdateServerDataSerializer
+from ..mutableValues.current_number_of_players_generator import generate_number_of_players
+from ..serializers.server_serializers import ServerDataSerializer, UpdateServerDataSerializer, ServerDataWithCountSerializer
 from ..services.server_service import ServerDataService
 from ..permissions.server_permission import ServerPermission
 
 
 class ServerDataGetAPIView(GenericAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = ServerDataWithCountSerializer
 
     def get(self, request: Request) -> Response:
-        """ Getting last n news """
-        response = ServerDataService.get_server_by_permission()
-        return Response(data=response.data, status=status.HTTP_200_OK)
+        """ Getting server data """
+        response = generate_number_of_players()
+        return Response(data=response, status=status.HTTP_200_OK)
 
 
 class ServerDataPostAPIView(GenericAPIView):
