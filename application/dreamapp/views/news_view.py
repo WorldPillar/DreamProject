@@ -12,9 +12,9 @@ from ..permissions.news_service_permission import NewsPermission
 class NewsGetAPIView(GenericAPIView):
     serializer_class = GetNewsDataSerializer
 
-    def get(self, request: Request, pk: int = 3) -> Response:
+    def get(self, request: Request, count: int = 3) -> Response:
         """ Getting last n news """
-        response = NewsDataService.get_last_news(pk)
+        response = NewsDataService.get_last_news(count)
         return Response(data=response.data, status=status.HTTP_200_OK)
 
 
