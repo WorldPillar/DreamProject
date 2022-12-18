@@ -2,10 +2,16 @@ import random
 from ..serializers.server_serializers import ServerDataSerializer
 from .max_number_of_players import maxCount
 from ..models import ServerData
+from ..permissions.server_permission import GetBanServers
 
 
-def generate_number_of_players():
+def generate_number_of_players(user):
     servers = ServerData.objects.all()
+    ban_servers = GetBanServers.banservers(user)
+
+    for ban in ban_servers:
+        if ban.server in servers:
+            servers = servers.exclude(id=ban.server.id)
 
     servers_with_count = []
     for server in servers:
@@ -20,34 +26,3 @@ def generate_number_of_players():
         server_data.update(counter)
         servers_with_count.append(server_data)
     return servers_with_count
-
-#
-# def run_continuously(self, interval=1):
-#     """Continuously run, while executing pending jobs at each elapsed
-#     time interval.
-#     @return cease_continuous_run: threading.Event which can be set to
-#     cease continuous run.
-#     Please note that it is *intended behavior that run_continuously()
-#     does not run missed jobs*. For example, if you've registered a job
-#     that should run every minute and you set a continuous run interval
-#     of one hour then your job won't be run 60 times at each interval but
-#     only once.
-#     """
-#
-#     cease_continuous_run = threading.Event()
-#
-#     class ScheduleThread(threading.Thread):
-#
-#         @classmethod
-#         def run(cls):
-#             while not cease_continuous_run.is_set():
-#                 self.run_pending()
-#                 time.sleep(interval)
-#
-#     continuous_thread = ScheduleThread()
-#     continuous_thread.setDaemon(True)
-#     continuous_thread.start()
-#     return cease_continuous_run
-#
-#
-# Scheduler.run_continuously = run_continuously

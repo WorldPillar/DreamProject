@@ -1,7 +1,8 @@
 from typing import Optional
 from django.db.models import QuerySet
 
-from ..models import AccountServerAccessLevel, AccountServiceAccessLevel
+from ..models import AccountServerAccessLevel, AccountServiceAccessLevel, AccessLevel
+from ..serializers.server_serializers import ServerDataSerializer
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -35,8 +36,15 @@ class AccountServerAccessLevelService:
         return acc_serv_access_lvl
 
     @staticmethod
-    def get_account_sal_by_access_level(_access_level: int) -> QuerySet:
-        acc_serv_access_lvl = AccountServerAccessLevel.objects.filter(access_level_id=_access_level).all()
+    def get_account_sal_by_access_level(_access_level: str) -> QuerySet:
+        level = AccessLevel.objects.filter(name=_access_level).first()
+        acc_serv_access_lvl = AccountServerAccessLevel.objects.filter(access_level=level).all()
+        return acc_serv_access_lvl
+
+    @staticmethod
+    def get_account_sal_by_access_level_and_user(_access_level: str, _account: User) -> QuerySet:
+        level = AccessLevel.objects.filter(name=_access_level).first()
+        acc_serv_access_lvl = AccountServerAccessLevel.objects.filter(access_level=level, account=_account).all()
         return acc_serv_access_lvl
 
     @staticmethod

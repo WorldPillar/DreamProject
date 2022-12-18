@@ -1,4 +1,6 @@
 from ..services.account_access_service import AccountServiceAccessLevelService
+from ..services.account_access_service import AccountServerAccessLevelService
+from django.db.models import QuerySet
 
 
 class ServerPermission:
@@ -13,4 +15,10 @@ class ServerPermission:
             print(f'Admission denied')
         return False
 
+
+class GetBanServers:
+
+    @staticmethod
+    def banservers(user) -> QuerySet:
+        return AccountServerAccessLevelService.get_account_sal_by_access_level_and_user("Ban", user)
 

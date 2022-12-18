@@ -16,7 +16,7 @@ class ServerDataGetAPIView(GenericAPIView):
 
     def get(self, request: Request) -> Response:
         """ Getting server data """
-        response = generate_number_of_players()
+        response = generate_number_of_players(request.user)
         return Response(data=response, status=status.HTTP_200_OK)
 
 

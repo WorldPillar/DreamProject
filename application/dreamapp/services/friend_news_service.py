@@ -22,18 +22,27 @@ class FriendListService:
     #     friend_list.save()
 
     @staticmethod
-    def create_friend_list(_owner: User, _friend: str) -> bool:
+    def create_friend_list(_owner: User, _friend: str) -> (bool, dict):
         friend = User.objects.filter(username=_friend).first()
-        if friend is not None:
+        friendInList = FriendList.objects.filter(owner=_owner, friend=friend).first()
+        try:
+            if friend is None:
+                raise NameError()
+            if friendInList is not None:
+                raise Exception()
             friend_list = FriendList.objects.create(
                 owner=_owner,
                 friend=friend
             )
             friend_list.save()
-            print(f'Friend list was created')
-            return True
-        print(f'Error in creating')
-        return False
+            response = {"message": "Friend list was created"}
+            return True, response
+        except NameError:
+            response = {"message": "User does not exist"}
+            return False, response
+        except Exception:
+            response = {"message": "User is already in the friendlist"}
+            return False, response
 
     @staticmethod
     def get_friend_list_by_owner(_owner: User) -> GetFriendListSerializer:

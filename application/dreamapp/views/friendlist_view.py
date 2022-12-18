@@ -23,9 +23,10 @@ class FriendListPostDeleteAPIView(GenericAPIView):
 
     def post(self, request: Request, friend: str) -> Response:
         """ Adding new friend """
-        if FriendListService.create_friend_list(request.user, friend):
-            return Response(status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        (isBuild, response) = FriendListService.create_friend_list(request.user, friend)
+        if isBuild:
+            return Response(response, status=status.HTTP_201_CREATED)
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request: Request, friend: str) -> Response:
         """ Deleting friend by id """
