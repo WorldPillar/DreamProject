@@ -107,7 +107,7 @@ class NewsDataService:
 
     @staticmethod
     def get_last_news(count: int) -> GetNewsDataSerializer:
-        news_data = NewsData.objects.order_by('-date')[:count][::-1]
+        news_data = NewsData.objects.order_by('-date')[:count]
         response = GetNewsDataSerializer(news_data, many=True)
         return response
 
